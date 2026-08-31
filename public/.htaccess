@@ -1,0 +1,133 @@
+# ==================================================================
+#  Taxi Service Talara — configuración de Apache (cPanel)
+#
+#  Este archivo vive en public/ y Vite lo copia a dist/ en cada build.
+#  Al subir el contenido de dist/ a public_html, viaja con el sitio:
+#  no hay que crearlo ni actualizarlo a mano.
+#
+#  Todo va dentro de <IfModule>: si el hosting no tiene alguno de los
+#  módulos, Apache lo ignora en vez de devolver un error 500.
+# ==================================================================
+
+AddDefaultCharset UTF-8
+
+# Sin listados de directorio.
+Options -Indexes
+
+# Nuestro sitio arranca en index.html.
+DirectoryIndex index.html
+
+# ------------------------------------------------------------------
+#  1. Bloquear archivos que nunca deben servirse
+#     (por si alguna vez se sube un .env o un backup por error)
+# ------------------------------------------------------------------
+<IfModule mod_authz_core.c>
+  <FilesMatch "^\.|\.(env|log|bak|orig|sql|yml|yaml|ini|sh|ts|tsx|map|lock)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+
+# ------------------------------------------------------------------
+#  2. HTTPS obligatorio + fallback SPA
+# ------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # ---- Validación de certificados: PRIMERO QUE TODO ----
+  # AutoSSL y Let's Encrypt validan el dominio pidiendo un archivo en
+  # /.well-known/acme-challenge/ POR HTTP, antes de que exista el
+  # certificado. Si esa petición cae en el redirect a HTTPS, la
+  # validación falla y el certificado no se emite.
+  RewriteRule ^\.well-known/ - [L]
+
+  # Forzar HTTPS (301 permanente).
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteCond %{HTTP:X-Forwarded-SSL} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Fallback SPA: si la ruta no es un archivo ni una carpeta real,
+  # servir index.html y dejar que React resuelva.
+  RewriteCond %{REQUEST_URI} !^/assets/
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# ------------------------------------------------------------------
+#  3. Cabeceras de seguridad
+# ------------------------------------------------------------------
+<IfModule mod_headers.c>
+  # HTTPS obligatorio durante 2 años, subdominios incluidos.
+  # Ojo: activar SOLO cuando AutoSSL ya funcione.
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+
+  # Content-Security-Policy — la defensa principal contra XSS.
+  # Sitio 100% estático: no hay CMS, ni formulario, ni servicios externos.
+  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+
+  # No anunciar la versión de PHP.
+  Header always unset X-Powered-By
+</IfModule>
+
+# ------------------------------------------------------------------
+#  4. Compresión
+# ------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+  AddOutputFilterByType DEFLATE application/json application/manifest+json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css application/javascript image/svg+xml
+</IfModule>
+
+# ------------------------------------------------------------------
+#  5. Caché
+#     Vite pone un hash en el nombre de cada archivo de /assets/:
+#     si el contenido cambia, cambia el nombre. Por eso se pueden
+#     cachear un año sin miedo. El index.html nunca se cachea.
+# ------------------------------------------------------------------
+<IfModule mod_setenvif.c>
+  SetEnvIf Request_URI "^/assets/" HASHED_ASSET
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set Cache-Control "public, max-age=31536000, immutable" env=HASHED_ASSET
+
+  <FilesMatch "\.html$">
+    Header always set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  <FilesMatch "\.(ico|svg|png|jpg|jpeg|webp|txt|xml)$">
+    Header always set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+
+  <FilesMatch "\.mp4$">
+    Header always set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
+
+# ------------------------------------------------------------------
+#  6. Tipos MIME que algunos cPanel viejos no traen
+# ------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType application/javascript          .js .mjs
+  AddType font/woff2                      .woff2
+  AddType image/svg+xml                   .svg
+  AddType application/manifest+json       .webmanifest
+  AddType video/mp4                       .mp4
+</IfModule>
+
+# Nota: a propósito NO hay `ErrorDocument 404 /index.html`.
+# El fallback SPA de arriba ya sirve el sitio en cualquier ruta que no
+# sea un archivo real.

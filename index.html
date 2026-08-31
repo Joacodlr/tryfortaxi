@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#122B29" />
+
+    <title>Taxi Service Talara — Traslados a Cabo Blanco, Punta Sal y Punta Veleros</title>
+    <meta
+      name="description"
+      content="Traslados y turismo en Talara: Cabo Blanco, Punta Sal y Punta Veleros. Van, camioneta o bus turístico. Reserva por WhatsApp."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_PE" />
+    <meta property="og:title" content="Taxi Service Talara — Traslados y turismo" />
+    <meta
+      property="og:description"
+      content="Traslados a Cabo Blanco, Punta Sal y Punta Veleros. Reserva por WhatsApp."
+    />
+    <meta property="og:image" content="/cabo-blanco/cabo-blanco-2.jpeg" />
+
+    <!-- Las fuentes se auto-hospedan; se importan en src/main.tsx -->
+
+    <!-- La foto de portada es lo más grande que se pinta primero:
+         pedirla acá adelanta la carga y mejora el tiempo de render. -->
+    <link rel="preload" as="image" href="/cabo-blanco/cabo-blanco-2.jpeg" fetchpriority="high" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
