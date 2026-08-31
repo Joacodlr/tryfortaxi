@@ -3,25 +3,24 @@ import type { ComponentType } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
-  Briefcase,
+  Bus,
   Car,
   Check,
   Images,
   Mail,
   MapPin,
   Menu,
-  PartyPopper,
   Phone,
-  PlaneTakeoff,
   Play,
   ShieldCheck,
   Sparkles,
+  Truck,
   Waves,
   X,
 } from "lucide-react";
 
-import { ABOUT, CONTACT, DESTINATIONS, HIGHLIGHTS, NAV, SERVICES, WA } from "./data";
-import type { Destination, Media, Service } from "./data";
+import { ABOUT, CONTACT, DESTINATIONS, HIGHLIGHTS, NAV, SERVICES, SERVICE_NOTES, WA } from "./data";
+import type { Destination, Media, Service, ServiceNote } from "./data";
 import { Btn, Eyebrow, Reveal } from "./ui";
 import { useRevealOnScroll, useRoute } from "./hooks";
 import { Lightbox } from "./lib/Lightbox";
@@ -557,10 +556,9 @@ function Destinations({ onOpen }: { onOpen: (id: string) => void }) {
 /* ============================== SERVICIOS ============================== */
 
 const SERVICE_ICON: Record<string, ComponentType<{ size?: number; className?: string }>> = {
-  "taxi-traslado-aeropuerto": PlaneTakeoff,
-  "servicio-turistico": Waves,
-  "taxi-corporativo": Briefcase,
-  "traslado-eventos": PartyPopper,
+  "servicio-van-turistica": Car,
+  "alquiler-camionetas": Truck,
+  "servicio-turistico-de-bus": Bus,
 };
 
 function ServiceCard({ s, delay, onOpen }: { s: Service; delay: number; onOpen: (items: Media[], i: number) => void }) {
@@ -593,6 +591,16 @@ function ServiceCard({ s, delay, onOpen }: { s: Service; delay: number; onOpen: 
   );
 }
 
+/** Burbuja de texto: descripción real de un servicio que aún no tiene foto propia. */
+function ServiceBubble({ note }: { note: ServiceNote }) {
+  return (
+    <div className="relative rounded-3xl rounded-tl-md border border-line bg-white p-5 shadow-card">
+      <p className="font-display text-[14px] font-extrabold text-carbon">{note.label}</p>
+      <p className="mt-1.5 text-[13px] leading-relaxed text-steel">{note.desc}</p>
+    </div>
+  );
+}
+
 function Services({ onOpen, onGoFares }: { onOpen: (items: Media[], i: number) => void; onGoFares: () => void }) {
   return (
     <section id="servicios" className="border-y border-line bg-mist py-20 lg:py-24">
@@ -604,14 +612,27 @@ function Services({ onOpen, onGoFares }: { onOpen: (items: Media[], i: number) =
           <h2 className="h-section mb-12 max-w-xl text-carbon">Cómo te movemos</h2>
         </Reveal>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => (
             <ServiceCard key={s.id} s={s} delay={i * 100} onOpen={onOpen} />
           ))}
         </div>
 
+        <div className="mt-14">
+          <Reveal>
+            <p className="label-mono mb-5 text-ocean-deep">También ofrecemos</p>
+          </Reveal>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {SERVICE_NOTES.map((n, i) => (
+              <Reveal key={n.label} delay={i * 90}>
+                <ServiceBubble note={n} />
+              </Reveal>
+            ))}
+          </div>
+        </div>
+
         <Reveal delay={200}>
-          <p className="mt-8 text-[14px] text-steel">
+          <p className="mt-10 text-[14px] text-steel">
             Ver tarifas y condiciones de reserva en{" "}
             <button
               onClick={onGoFares}

@@ -109,33 +109,55 @@ export type Service = {
  */
 export const SERVICES: Service[] = [
   {
-    id: "taxi-traslado-aeropuerto",
-    label: "Taxi traslado al aeropuerto",
-    desc: "Servicios de Taxi Privado a los diferentes aeropuertos: Piura, Talara y Tumbes y recojo desde ellos. Contamos con autos del año full equipo y Vans para 11 y 15 personas (asientos reclinables, aire acondicionado) que les permitirá viajar cómodamente; además cuenta con espacio suficiente para los equipajes.",
+    id: "servicio-van-turistica",
+    label: "Van turística",
+    desc: "Traslados al aeropuerto de Talara y a los balnearios cercanos, con espacio para equipaje.",
     media: [
       { type: "image", src: "/servicio-van-turistica/van-turistica-1.jpeg" },
       { type: "image", src: "/servicio-van-turistica/van-turistica-2.jpeg" },
+    ],
+  },
+  {
+    id: "alquiler-camionetas",
+    label: "Alquiler de camionetas",
+    desc: "Camionetas con conductor para grupos, familias o rutas a medida por la zona.",
+    media: [
       { type: "image", src: "/alquiler-camionetas/camioneta-1.jpeg" },
       { type: "image", src: "/alquiler-camionetas/camioneta-2.jpeg" },
     ],
   },
   {
-    id: "servicio-turistico",
-    label: "Servicio turístico",
-    desc: "Brindamos servicio a las diferentes playas del norte: Lobitos, Cabo Blanco, el Ñuro, Punta Veleros, Vichayito, Las Pocitas, Mancora, Punta Sal, Zorritos y Tumbes.",
+    id: "servicio-turistico-de-bus",
+    label: "Servicio turístico en bus",
+    desc: "Movilidad para grupos grandes: excursiones y traslados programados.",
     media: [{ type: "image", src: "/servicio-turistico-de-bus/bus-turistico-1.png" }],
   },
+];
+
+export type ServiceNote = { label: string; desc: string };
+
+/**
+ * Descripciones reales de la empresa (texto tal cual el sitio original)
+ * que no tienen foto propia todavía. Se muestran como burbujas de texto
+ * debajo de las tarjetas de `SERVICES`, sin forzarlas a una tarjeta con
+ * galería que no tienen.
+ */
+export const SERVICE_NOTES: ServiceNote[] = [
   {
-    id: "taxi-corporativo",
-    label: "Taxi corporativo",
-    desc: "Servicio corporativo para empresas con tarifas especiales.",
-    media: [],
+    label: "Taxi traslado al aeropuerto",
+    desc: "Servicios de Taxi Privado a los diferentes aeropuertos: Piura, Talara y Tumbes y recojo desde ellos. Contamos con autos del año full equipo y Vans para 11 y 15 personas (asientos reclinables, aire acondicionado) que les permitirá viajar cómodamente; además cuenta con espacio suficiente para los equipajes.",
   },
   {
-    id: "traslado-eventos",
+    label: "Servicio turístico",
+    desc: "Brindamos servicio a las diferentes playas del norte: Lobitos, Cabo Blanco, el Ñuro, Punta Veleros, Vichayito, Las Pocitas, Mancora, Punta Sal, Zorritos y Tumbes.",
+  },
+  {
+    label: "Taxi corporativo",
+    desc: "Servicio corporativo para empresas con tarifas especiales.",
+  },
+  {
     label: "Traslado a eventos",
     desc: "Servicio de traslado a eventos, conferencias, congresos, convenciones, seminarios, matrimonios y excursiones.",
-    media: [],
   },
 ];
 
