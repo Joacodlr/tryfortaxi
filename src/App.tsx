@@ -3,28 +3,31 @@ import type { ComponentType } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
-  Bus,
+  Briefcase,
   Car,
   Check,
   Images,
   Mail,
   MapPin,
   Menu,
+  PartyPopper,
   Phone,
+  PlaneTakeoff,
   Play,
   ShieldCheck,
   Sparkles,
-  Truck,
   Waves,
   X,
 } from "lucide-react";
 
-import { CONTACT, DESTINATIONS, HIGHLIGHTS, NAV, TRANSPORT_SERVICES, WA } from "./data";
-import type { Destination, Media, TransportService } from "./data";
+import { ABOUT, CONTACT, DESTINATIONS, HIGHLIGHTS, NAV, SERVICES, WA } from "./data";
+import type { Destination, Media, Service } from "./data";
 import { Btn, Eyebrow, Reveal } from "./ui";
 import { useRevealOnScroll, useRoute } from "./hooks";
 import { Lightbox } from "./lib/Lightbox";
 import { DestinationPage } from "./DestinationPage";
+import { WorkWithUsPage } from "./WorkWithUsPage";
+import { TarifasPage } from "./TarifasPage";
 
 /* ------------------------------------------------------------------ *
  *  TAXI SERVICE TALARA — traslados y turismo en Talara
@@ -56,10 +59,21 @@ export default function App() {
 
   const destMatch = path.match(DEST_PATH);
   const activeDest = destMatch ? DESTINATIONS.find((d) => d.id === destMatch[1]) : undefined;
+  const onWorkPage = path === "/trabaja-con-nosotros";
+  const onFaresPage = path === "/tarifas";
 
-  /** Navega a la home (si hace falta) y hace scroll a una sección. */
+  /**
+   * Navega según el tipo de ítem: una "page" (Trabaja con nosotros,
+   * Tarifas) va a su propia ruta; una "section" vuelve a la home (si
+   * hace falta) y hace scroll hasta ese id.
+   */
   const goto = (id: string) => {
     setMenu(false);
+    const item = NAV.find((n) => n.id === id);
+    if (item?.kind === "page") {
+      navigate(item.path);
+      return;
+    }
     if (path !== "/") {
       navigate("/");
       requestAnimationFrame(() =>
@@ -96,12 +110,16 @@ export default function App() {
             onOpenLightbox={openGallery}
             onNavigate={goDestination}
           />
+        ) : onWorkPage ? (
+          <WorkWithUsPage />
+        ) : onFaresPage ? (
+          <TarifasPage />
         ) : (
           <>
             <Hero goto={goto} />
             <Highlights />
             <Destinations onOpen={goDestination} />
-            <Services onOpen={openGallery} />
+            <Services onOpen={openGallery} onGoFares={() => navigate("/tarifas")} />
             <About />
             <Contact />
           </>
@@ -173,12 +191,12 @@ function Header({
             </span>
           </button>
 
-          <nav className="hidden items-center gap-0.5 text-carbon lg:flex">
+          <nav className="hidden items-center text-carbon xl:flex">
             {NAV.map((n) => (
               <button
                 key={n.id}
                 onClick={() => goto(n.id)}
-                className="nav-link rounded-lg px-3 py-2 font-display text-[14.5px] font-semibold"
+                className="nav-link whitespace-nowrap rounded-lg px-2.5 py-2 font-display text-[13.5px] font-semibold"
               >
                 {n.label}
               </button>
@@ -195,7 +213,7 @@ function Header({
               <WhatsAppIcon size={16} /> Reservar
             </a>
             <button
-              className="rounded-xl p-2.5 text-carbon transition-colors hover:bg-mist lg:hidden"
+              className="rounded-xl p-2.5 text-carbon transition-colors hover:bg-mist xl:hidden"
               onClick={() => setMenu(!menu)}
               aria-label={menu ? "Cerrar menú" : "Abrir menú"}
               aria-expanded={menu}
@@ -206,7 +224,7 @@ function Header({
         </div>
       </header>
 
-      <div className={`fixed inset-0 z-40 lg:hidden ${menu ? "" : "pointer-events-none"}`} aria-hidden={!menu}>
+      <div className={`fixed inset-0 z-40 xl:hidden ${menu ? "" : "pointer-events-none"}`} aria-hidden={!menu}>
         <div
           className={`absolute inset-0 bg-ink/60 transition-opacity duration-400 ${menu ? "opacity-100" : "opacity-0"}`}
           onClick={() => setMenu(false)}
@@ -539,12 +557,13 @@ function Destinations({ onOpen }: { onOpen: (id: string) => void }) {
 /* ============================== SERVICIOS ============================== */
 
 const SERVICE_ICON: Record<string, ComponentType<{ size?: number; className?: string }>> = {
-  "servicio-van-turistica": Car,
-  "alquiler-camionetas": Truck,
-  "servicio-turistico-de-bus": Bus,
+  "taxi-traslado-aeropuerto": PlaneTakeoff,
+  "servicio-turistico": Waves,
+  "taxi-corporativo": Briefcase,
+  "traslado-eventos": PartyPopper,
 };
 
-function ServiceCard({ s, delay, onOpen }: { s: TransportService; delay: number; onOpen: (items: Media[], i: number) => void }) {
+function ServiceCard({ s, delay, onOpen }: { s: Service; delay: number; onOpen: (items: Media[], i: number) => void }) {
   const Icon = SERVICE_ICON[s.id] ?? Car;
 
   return (
@@ -574,7 +593,7 @@ function ServiceCard({ s, delay, onOpen }: { s: TransportService; delay: number;
   );
 }
 
-function Services({ onOpen }: { onOpen: (items: Media[], i: number) => void }) {
+function Services({ onOpen, onGoFares }: { onOpen: (items: Media[], i: number) => void; onGoFares: () => void }) {
   return (
     <section id="servicios" className="border-y border-line bg-mist py-20 lg:py-24">
       <div className="shell">
@@ -585,16 +604,22 @@ function Services({ onOpen }: { onOpen: (items: Media[], i: number) => void }) {
           <h2 className="h-section mb-12 max-w-xl text-carbon">Cómo te movemos</h2>
         </Reveal>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {TRANSPORT_SERVICES.map((s, i) => (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {SERVICES.map((s, i) => (
             <ServiceCard key={s.id} s={s} delay={i * 100} onOpen={onOpen} />
           ))}
         </div>
 
         <Reveal delay={200}>
           <p className="mt-8 text-[14px] text-steel">
-            Sin tarifas publicadas: cada servicio se cotiza según destino, horario y tamaño del
-            grupo. Escribinos y te confirmamos el costo antes de salir.
+            Ver tarifas y condiciones de reserva en{" "}
+            <button
+              onClick={onGoFares}
+              className="font-semibold text-ocean-deep underline underline-offset-2"
+            >
+              Tarifas y Reservas
+            </button>
+            .
           </p>
         </Reveal>
       </div>
@@ -629,11 +654,20 @@ function About() {
             <h2 className="h-section">Transporte y turismo local en Talara.</h2>
           </Reveal>
           <Reveal delay={150}>
-            <p className="mt-6 text-[16px] leading-relaxed text-steel-2">
-              Coordinamos traslados dentro de Talara y hacia las playas cercanas —Cabo Blanco, Punta
-              Sal y Punta Veleros— con van, camioneta o bus según el tamaño del grupo. Todo se
-              coordina directo por WhatsApp o llamada, sin intermediarios.
-            </p>
+            <p className="mt-6 text-[16px] leading-relaxed text-steel-2">{ABOUT.quienesSomos}</p>
+          </Reveal>
+
+          <Reveal delay={210}>
+            <div className="mt-8 grid gap-5 border-t border-white/10 pt-8 sm:grid-cols-2">
+              <div>
+                <p className="label-mono text-sun">Visión</p>
+                <p className="mt-2 text-[14px] leading-relaxed text-steel-2">{ABOUT.vision}</p>
+              </div>
+              <div>
+                <p className="label-mono text-sun">Misión</p>
+                <p className="mt-2 text-[14px] leading-relaxed text-steel-2">{ABOUT.mision}</p>
+              </div>
+            </div>
           </Reveal>
         </div>
 
@@ -691,7 +725,7 @@ function Contact() {
                 [
                   [Phone, "Teléfono", CONTACT.phone, CONTACT.phoneHref],
                   [Mail, "Email", CONTACT.email, `mailto:${CONTACT.email}`],
-                  [MapPin, "Zona de cobertura", CONTACT.area, null],
+                  [MapPin, "Dirección", CONTACT.address, null],
                   [FacebookIcon, "Facebook", "TAXISERVICETALARA", CONTACT.facebook],
                 ] as const
               ).map(([Ic, t, d, href]) => {

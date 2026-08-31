@@ -41,16 +41,26 @@ npm run dev      # http://localhost:5173
 | `src/hooks.ts`           | Observador de scroll y enrutador mínimo (`useRoute`)                |
 | `src/App.tsx`            | Secciones de la home y composición                                   |
 | `src/DestinationPage.tsx`| Página propia de cada destino (`/destinos/<id>`): galería completa, descripción y CTA |
+| `src/WorkWithUsPage.tsx` | Página "Trabaja con nosotros" (`/trabaja-con-nosotros`): requisitos   |
+| `src/TarifasPage.tsx`    | Página "Tarifas y Reservas" (`/tarifas`): precios y condiciones       |
 
-El sitio tiene rutas propias por destino (`/destinos/cabo-blanco`, etc.) usando
-`history.pushState`, sin librería de routing — no hace falta más para dos
-vistas. El `.htaccess` ya sirve `index.html` en cualquier ruta, así que abrir
-esas URLs directo (o recargar la página) también funciona.
+El sitio tiene rutas propias (`/destinos/cabo-blanco`, `/tarifas`,
+`/trabaja-con-nosotros`) usando `history.pushState`, sin librería de
+routing — no hace falta más para un sitio de este tamaño. El `.htaccess`
+(cPanel) y `vercel.json` (Vercel) ya sirven `index.html` en cualquier ruta,
+así que abrir esas URLs directo (o recargar la página) también funciona.
+
+### Contenido real vs. contenido de partida
+
+`SERVICES`, `TARIFAS`, `WORK_WITH_US` y `ABOUT` en `src/data.ts` son texto
+**real de la empresa** (tomado del sitio original) — no parafrasear ni
+inventar cifras nuevas al editarlos. `DESTINATIONS` sí es contenido de
+partida (ver pendientes abajo).
 
 ### Fotos y videos
 
 Cada destino o servicio tiene su propia carpeta en `public/`, y `src/data.ts`
-(`DESTINATIONS` / `TRANSPORT_SERVICES`) apunta a esos archivos:
+(`DESTINATIONS` / `SERVICES`) apunta a esos archivos:
 
 ```
 public/
@@ -69,9 +79,12 @@ vez de galería.
 
 ## Pendientes antes de publicar
 
-- [ ] **Revisar el texto de cada destino y servicio** en `src/data.ts` — es
-      contenido de partida, conviene que el dueño lo confirme o ajuste.
+- [ ] **Revisar el texto de cada destino** (`DESTINATIONS` en `src/data.ts`)
+      — es contenido de partida, a diferencia de `SERVICES`/`TARIFAS`/
+      `WORK_WITH_US`/`ABOUT`, que ya son texto real de la empresa.
 - [ ] Confirmar enlaces de Facebook/Instagram en `src/data.ts` → `CONTACT`.
+- [ ] Fotos para "Taxi corporativo" y "Traslado a eventos" en `SERVICES`
+      (`src/data.ts`) — hoy esas tarjetas muestran un ícono, sin foto.
 
 ## Despliegue (cPanel)
 
