@@ -181,9 +181,15 @@ function Header({
       >
         <div className="shell flex h-[68px] items-center justify-between gap-6">
           <button onClick={() => goto("top")} aria-label="Ir al inicio" className="flex shrink-0 items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-ocean text-white">
-              <Waves size={18} />
-            </span>
+            {/* El logo es un JPEG con fondo blanco: `mix-blend-multiply` lo
+                funde con el papel del header en vez de dejar un recuadro. */}
+            <img
+              src="/logo.jpeg"
+              alt=""
+              width={44}
+              height={44}
+              className="h-11 w-11 shrink-0 object-contain mix-blend-multiply"
+            />
             <span className="font-display text-[16.5px] font-extrabold leading-tight text-carbon">
               Taxi Service
               <br className="hidden sm:block" /> Talara
@@ -307,8 +313,9 @@ function Hero({ goto }: { goto: (id: string) => void }) {
 
           <Reveal delay={220}>
             <p className="mt-7 max-w-lg text-[17px] leading-relaxed text-white/75">
-              Traslados a Cabo Blanco, Punta Sal y Punta Veleros, y servicio de van, camioneta o bus
-              turístico. Coordinás todo por WhatsApp.
+              Traslados a Cabo Blanco, El Ñuro, Punta Veleros, Vichayito, Las Pocitas, Punta Sal y
+              Zorritos. Servicio de Auto, Camioneta de 3 Filas, Van, Bus Turístico. Coordinás todo
+              por WhatsApp.
             </p>
           </Reveal>
 
@@ -347,7 +354,7 @@ function Hero({ goto }: { goto: (id: string) => void }) {
 /* ============================= HIGHLIGHTS ============================== */
 
 const CAPS = [
-  [Waves, "Playas de la zona", "Cabo Blanco, Punta Sal y Punta Veleros"],
+  [Waves, "Playas de la zona", "De Cabo Blanco a Punta Sal, pasando por Máncora"],
   [Car, "Van, camioneta o bus", "Según el tamaño de tu grupo"],
   [Sparkles, "Traslados a medida", "Rutas y horarios que coordinás vos"],
   [ShieldCheck, "Reserva directa", "Por WhatsApp o llamada, sin apps"],
@@ -744,12 +751,13 @@ function Contact() {
             <div className="grid h-full gap-4 sm:grid-cols-2">
               {(
                 [
-                  [Phone, "Teléfono", CONTACT.phone, CONTACT.phoneHref],
-                  [Mail, "Email", CONTACT.email, `mailto:${CONTACT.email}`],
-                  [MapPin, "Dirección", CONTACT.address, null],
-                  [FacebookIcon, "Facebook", "TAXISERVICETALARA", CONTACT.facebook],
+                  [Phone, "Teléfono", CONTACT.phone, CONTACT.phoneHref, false],
+                  [Mail, "Email", CONTACT.email, `mailto:${CONTACT.email}`, false],
+                  [FacebookIcon, "Facebook", "TAXISERVICETALARA", CONTACT.facebook, false],
+                  [InstagramIcon, "Instagram", "taxiservicetalara", CONTACT.instagram, false],
+                  [MapPin, "Dirección", CONTACT.address, null, true],
                 ] as const
-              ).map(([Ic, t, d, href]) => {
+              ).map(([Ic, t, d, href, wide]) => {
                 const inner = (
                   <>
                     <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-mist text-ocean-deep transition-colors duration-300 group-hover:bg-sun group-hover:text-ink">
@@ -767,12 +775,19 @@ function Contact() {
                     href={href}
                     target={href.startsWith("http") ? "_blank" : undefined}
                     rel={href.startsWith("http") ? "noreferrer" : undefined}
-                    className="group flex items-center gap-3 rounded-2xl border border-line bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-sun/50 hover:shadow-card"
+                    className={`group flex items-center gap-3 rounded-2xl border border-line bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-sun/50 hover:shadow-card ${
+                      wide ? "sm:col-span-2" : ""
+                    }`}
                   >
                     {inner}
                   </a>
                 ) : (
-                  <div key={t} className="group flex items-center gap-3 rounded-2xl border border-line bg-white p-4">
+                  <div
+                    key={t}
+                    className={`group flex items-center gap-3 rounded-2xl border border-line bg-white p-4 ${
+                      wide ? "sm:col-span-2" : ""
+                    }`}
+                  >
                     {inner}
                   </div>
                 );
@@ -800,8 +815,8 @@ function Footer({ goto }: { goto: (id: string) => void }) {
             <span className="font-display text-[16.5px] font-extrabold">Taxi Service Talara</span>
           </div>
           <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-steel-2">
-            Traslados y turismo en Talara: Cabo Blanco, Punta Sal, Punta Veleros y servicio de van,
-            camioneta o bus. Reserva directa por WhatsApp.
+            Traslados y turismo en Talara: Cabo Blanco, Punta Veleros, Vichayito, Las Pocitas,
+            Punta Sal y servicio de van, camioneta o bus. Reserva directa por WhatsApp.
           </p>
           <div className="mt-6 flex gap-2">
             <a
