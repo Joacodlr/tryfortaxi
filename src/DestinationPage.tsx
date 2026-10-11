@@ -23,14 +23,14 @@ export function DestinationPage({
 
   return (
     <div className="pt-[68px]">
-      <section className="relative isolate flex min-h-[56svh] flex-col justify-end overflow-hidden bg-ink text-white">
+      <section className="relative isolate flex min-h-[56svh] flex-col justify-end overflow-hidden bg-sea text-white">
         <div className="absolute inset-0 -z-10" aria-hidden="true">
           {cover && cover.type === "image" ? (
             <img src={cover.src} alt="" className="h-full w-full object-cover" />
           ) : (
-            <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_75%_15%,#1f4d49_0%,#123230_55%,#0f2624_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_75%_15%,#1688d4_0%,#0866a8_55%,#054a7d_100%)]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/15" />
+          <div className="absolute inset-0 bg-gradient-to-t from-sea-deep via-sea-deep/50 to-sea-deep/10" />
           <div className="grain absolute inset-0 opacity-25" />
         </div>
 

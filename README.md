@@ -77,6 +77,19 @@ cambia el nombre, se actualiza la ruta en `src/data.ts`. Un servicio o destino
 sin fotos (`media: []`) se ve igual de bien: la tarjeta muestra un ícono en
 vez de galería.
 
+## Opiniones de pasajeros
+
+La sección "Opiniones" de la home es lo único con servidor: una función de
+Vercel en [`api/reviews.ts`](api/reviews.ts) que guarda las opiniones en
+Upstash Redis. Para activarla en Vercel: **Storage → Upstash for Redis →
+Connect** al proyecto (crea solas `KV_REST_API_URL` y `KV_REST_API_TOKEN`) y
+volver a desplegar. Sin eso, la sección muestra "no se pudieron cargar".
+
+- Se publican al instante; para borrar una, se elimina de la lista `reviews`
+  en el Data Browser de Upstash.
+- En `npm run dev` funciona sin configurar nada (guarda en memoria).
+- En cPanel no hay funciones: ahí las opiniones no funcionan.
+
 ## Pendientes antes de publicar
 
 - [ ] **Revisar el texto de cada destino** (`DESTINATIONS` en `src/data.ts`)

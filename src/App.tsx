@@ -27,6 +27,7 @@ import { Lightbox } from "./lib/Lightbox";
 import { DestinationPage } from "./DestinationPage";
 import { WorkWithUsPage } from "./WorkWithUsPage";
 import { TarifasPage } from "./TarifasPage";
+import { Reviews } from "./Reviews";
 
 /* ------------------------------------------------------------------ *
  *  TAXI SERVICE TALARA — traslados y turismo en Talara
@@ -120,6 +121,7 @@ export default function App() {
             <Destinations onOpen={goDestination} />
             <Services onOpen={openGallery} onGoFares={() => navigate("/tarifas")} />
             <About />
+            <Reviews />
             <Contact />
           </>
         )}
@@ -176,11 +178,18 @@ function Header({
     <>
       <header
         className={`fixed inset-x-0 top-0 z-50 border-b bg-paper/95 backdrop-blur transition-shadow duration-500 ${
-          scrolled ? "border-line shadow-[0_4px_24px_-12px_rgba(18,43,41,.25)]" : "border-transparent"
+          scrolled ? "border-line shadow-[0_4px_24px_-12px_rgba(11,39,64,.25)]" : "border-transparent"
         }`}
       >
-        <div className="shell flex h-[68px] items-center justify-between gap-6">
-          <button onClick={() => goto("top")} aria-label="Ir al inicio" className="flex shrink-0 items-center gap-2.5">
+        <div className="shell flex h-[68px] items-center justify-between gap-3">
+          {/* El logo puede encogerse (min-w-0) y el menú no (shrink-0): así
+              el botón de menú nunca queda fuera de pantalla, ni en celulares
+              angostos ni con la letra agrandada desde Android. */}
+          <button
+            onClick={() => goto("top")}
+            aria-label="Ir al inicio"
+            className="flex min-w-0 items-center gap-2.5 text-left"
+          >
             {/* El logo es un JPEG con fondo blanco: `mix-blend-multiply` lo
                 funde con el papel del header en vez de dejar un recuadro. */}
             <img
@@ -190,9 +199,9 @@ function Header({
               height={44}
               className="h-11 w-11 shrink-0 object-contain mix-blend-multiply"
             />
-            <span className="font-display text-[16.5px] font-extrabold leading-tight text-carbon">
+            <span className="min-w-0 font-display text-[15px] font-extrabold leading-tight text-carbon sm:text-[16.5px]">
               Taxi Service
-              <br className="hidden sm:block" /> Talara
+              <br /> Talara
             </span>
           </button>
 
@@ -208,7 +217,7 @@ function Header({
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <a
               href={waHref()}
               target="_blank"
@@ -218,12 +227,13 @@ function Header({
               <WhatsAppIcon size={16} /> Reservar
             </a>
             <button
-              className="rounded-xl p-2.5 text-carbon transition-colors hover:bg-mist xl:hidden"
+              className="inline-flex items-center gap-1.5 rounded-full bg-sea px-3.5 py-2.5 font-display text-[13.5px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(8,102,168,.8)] transition-colors hover:bg-sea-deep xl:hidden"
               onClick={() => setMenu(!menu)}
               aria-label={menu ? "Cerrar menú" : "Abrir menú"}
               aria-expanded={menu}
             >
-              {menu ? <X size={22} /> : <Menu size={22} />}
+              {menu ? <X size={19} /> : <Menu size={19} />}
+              Menú
             </button>
           </div>
         </div>
@@ -274,9 +284,9 @@ function Hero({ goto }: { goto: (id: string) => void }) {
   const [sinFoto, setSinFoto] = useState(false);
 
   return (
-    <section className="relative isolate flex min-h-[86svh] flex-col justify-end overflow-hidden bg-ink pt-[68px] text-white">
+    <section className="relative isolate flex min-h-[86svh] flex-col justify-end overflow-hidden bg-sea pt-[68px] text-white">
       <div className="absolute inset-0 -z-10" aria-hidden="true">
-        <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_75%_15%,#1f4d49_0%,#123230_55%,#0f2624_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_75%_15%,#1688d4_0%,#0866a8_55%,#054a7d_100%)]" />
 
         {!sinFoto && (
           <img
@@ -289,8 +299,11 @@ function Hero({ goto }: { goto: (id: string) => void }) {
           />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/25" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-ink/45" />
+        {/* Degradado solo del lado del texto: la foto queda con sus colores
+            reales a la derecha. En celular el texto ocupa todo el ancho,
+            así que ahí el velo llega un poco más lejos. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-sea-deep/90 via-sea-deep/55 to-sea-deep/10 lg:from-sea-deep/95 lg:via-sea-deep/70 lg:via-40% lg:to-transparent lg:to-75%" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-sea-deep/50 to-transparent" />
         <div className="grain absolute inset-0 opacity-30" />
       </div>
 
@@ -312,7 +325,7 @@ function Hero({ goto }: { goto: (id: string) => void }) {
           </Reveal>
 
           <Reveal delay={220}>
-            <p className="mt-7 max-w-lg text-[17px] leading-relaxed text-white/75">
+            <p className="mt-7 max-w-lg text-[17px] leading-relaxed text-white/90">
               Traslados a Cabo Blanco, El Ñuro, Punta Veleros, Vichayito, Las Pocitas, Punta Sal y
               Zorritos. Servicio de Auto, Camioneta de 3 Filas, Van, Bus Turístico. Coordinás todo
               por WhatsApp.
@@ -332,16 +345,16 @@ function Hero({ goto }: { goto: (id: string) => void }) {
         </div>
       </div>
 
-      <div className="relative border-t border-white/12 bg-ink/40 backdrop-blur-sm">
+      <div className="relative border-t border-white/15 bg-sea-deep">
         <div className="shell flex flex-wrap items-center gap-x-8 gap-y-3 py-5">
           {HIGHLIGHTS.map((h) => (
-            <p key={h} className="flex items-center gap-2 text-[13px] text-white/70">
+            <p key={h} className="flex items-center gap-2 text-[13px] text-white/90">
               <Check size={15} className="text-sun" /> {h}
             </p>
           ))}
           <button
             onClick={() => goto("servicios")}
-            className="ml-auto hidden font-display text-[11px] font-bold uppercase tracking-[0.16em] text-white/45 transition-colors hover:text-sun lg:block"
+            className="ml-auto hidden font-display text-[11px] font-bold uppercase tracking-[0.16em] text-white/70 transition-colors hover:text-sun lg:block"
           >
             Ver servicios ↓
           </button>
@@ -362,7 +375,7 @@ const CAPS = [
 
 function Highlights() {
   return (
-    <section className="bg-ink">
+    <section className="bg-sea">
       <div className="shell grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {CAPS.map(([Ic, t, d], i) => (
           <Reveal key={t} delay={i * 80}>
@@ -479,8 +492,11 @@ function MediaGrid({
     );
   }
 
-  const visible = media.slice(0, 4);
+  // Una grande + cuatro chicas llenan la grilla 4×2 sin huecos; con
+  // exactamente 4 piezas, la última ocupa las dos columnas de abajo.
+  const visible = media.slice(0, 5);
   const extra = media.length - visible.length;
+  const last = visible.length - 1;
 
   return (
     <div className={`grid h-64 grid-cols-4 grid-rows-2 gap-1.5 ${className}`}>
@@ -489,10 +505,10 @@ function MediaGrid({
           key={m.src}
           m={m}
           onClick={() => onOpen(i)}
-          overlay={i === visible.length - 1 && extra > 0 ? extra : undefined}
-          className={`${i === 0 ? "col-span-2 row-span-2 rounded-l-2xl" : ""} ${i === 1 ? "rounded-tr-2xl" : ""} ${
-            i === visible.length - 1 ? "rounded-br-2xl" : ""
-          }`}
+          overlay={i === last && extra > 0 ? extra : undefined}
+          className={`${i === 0 ? "col-span-2 row-span-2 rounded-l-2xl" : ""} ${i === 2 ? "rounded-tr-2xl" : ""} ${
+            i === last ? "rounded-br-2xl" : ""
+          } ${i === last && visible.length === 4 ? "col-span-2" : ""}`}
         />
       ))}
     </div>
@@ -666,10 +682,10 @@ const TILES = [
 
 function About() {
   return (
-    <section id="nosotros" className="relative isolate overflow-hidden bg-ink py-20 text-white lg:py-24">
+    <section id="nosotros" className="relative isolate overflow-hidden bg-sea py-20 text-white lg:py-24">
       <div className="absolute inset-0 -z-10" aria-hidden="true">
-        <div className="absolute inset-0 bg-[radial-gradient(90%_70%_at_15%_0%,#1c433f,transparent_65%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_95%_90%,rgba(232,163,61,.12),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(90%_70%_at_15%_0%,#1d9be6,transparent_65%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_95%_90%,rgba(255,207,64,.16),transparent_70%)]" />
         <div className="grain absolute inset-0" />
       </div>
 
@@ -719,6 +735,14 @@ function About() {
 
 /* ============================== CONTACTO ============================== */
 
+/** Colores de marca de cada red: Facebook azul, Instagram rojo, email blanco. */
+const ICON_TILE = {
+  facebook: "bg-facebook text-white",
+  instagram: "bg-instagram text-white",
+  email: "border border-line bg-white text-ocean-deep shadow-sm",
+} as const;
+const ICON_TILE_DEFAULT = "bg-mist text-ocean-deep";
+
 function Contact() {
   return (
     <section id="contacto" className="bg-paper py-20 lg:py-24">
@@ -751,16 +775,16 @@ function Contact() {
             <div className="grid h-full gap-4 sm:grid-cols-2">
               {(
                 [
-                  [Phone, "Teléfono", CONTACT.phone, CONTACT.phoneHref, false],
-                  [Mail, "Email", CONTACT.email, `mailto:${CONTACT.email}`, false],
-                  [FacebookIcon, "Facebook", "TAXISERVICETALARA", CONTACT.facebook, false],
-                  [InstagramIcon, "Instagram", "taxiservicetalara", CONTACT.instagram, false],
-                  [MapPin, "Dirección", CONTACT.address, null, true],
+                  [Phone, "Teléfono", CONTACT.phone, CONTACT.phoneHref, false, ICON_TILE_DEFAULT],
+                  [Mail, "Email", CONTACT.email, `mailto:${CONTACT.email}`, false, ICON_TILE.email],
+                  [FacebookIcon, "Facebook", "TAXISERVICETALARA", CONTACT.facebook, false, ICON_TILE.facebook],
+                  [InstagramIcon, "Instagram", "taxiservicetalara", CONTACT.instagram, false, ICON_TILE.instagram],
+                  [MapPin, "Dirección", CONTACT.address, null, true, ICON_TILE_DEFAULT],
                 ] as const
-              ).map(([Ic, t, d, href, wide]) => {
+              ).map(([Ic, t, d, href, wide, tile]) => {
                 const inner = (
                   <>
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-mist text-ocean-deep transition-colors duration-300 group-hover:bg-sun group-hover:text-ink">
+                    <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-110 ${tile}`}>
                       <Ic size={17} />
                     </span>
                     <span className="min-w-0">
@@ -804,7 +828,7 @@ function Contact() {
 
 function Footer({ goto }: { goto: (id: string) => void }) {
   return (
-    <footer className="relative isolate overflow-hidden bg-ink text-white">
+    <footer className="relative isolate overflow-hidden bg-sea text-white">
       <div className="grain absolute inset-0 -z-10" aria-hidden="true" />
       <div className="shell grid gap-10 py-14 md:grid-cols-3">
         <div className="md:col-span-1">
@@ -818,24 +842,31 @@ function Footer({ goto }: { goto: (id: string) => void }) {
             Traslados y turismo en Talara: Cabo Blanco, Punta Veleros, Vichayito, Las Pocitas,
             Punta Sal y servicio de van, camioneta o bus. Reserva directa por WhatsApp.
           </p>
-          <div className="mt-6 flex gap-2">
+          <div className="mt-6 flex gap-2.5">
             <a
               href={CONTACT.facebook}
               target="_blank"
               rel="noreferrer"
               aria-label="Facebook"
-              className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 text-steel-2 transition-colors duration-300 hover:border-sun/40 hover:bg-sun/15 hover:text-sun"
+              className={`grid h-10 w-10 place-items-center rounded-full transition-transform duration-300 hover:scale-110 ${ICON_TILE.facebook}`}
             >
-              <FacebookIcon size={16} />
+              <FacebookIcon size={17} />
             </a>
             <a
               href={CONTACT.instagram}
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"
-              className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 text-steel-2 transition-colors duration-300 hover:border-sun/40 hover:bg-sun/15 hover:text-sun"
+              className={`grid h-10 w-10 place-items-center rounded-full transition-transform duration-300 hover:scale-110 ${ICON_TILE.instagram}`}
             >
-              <InstagramIcon size={16} />
+              <InstagramIcon size={17} />
+            </a>
+            <a
+              href={`mailto:${CONTACT.email}`}
+              aria-label="Email"
+              className={`grid h-10 w-10 place-items-center rounded-full transition-transform duration-300 hover:scale-110 ${ICON_TILE.email}`}
+            >
+              <Mail size={17} />
             </a>
           </div>
         </div>

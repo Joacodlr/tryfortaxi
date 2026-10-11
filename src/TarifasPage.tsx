@@ -30,7 +30,7 @@ function FareTable({ group }: { group: FareGroup }) {
 export function TarifasPage() {
   return (
     <div className="pt-[68px]">
-      <section className="bg-ink py-14 text-white lg:py-16">
+      <section className="bg-sea py-14 text-white lg:py-16">
         <div className="shell">
           <p className="label-mono flex items-center gap-3 text-sun">
             <span className="h-px w-8 bg-sun/50" />
@@ -98,7 +98,7 @@ export function TarifasPage() {
             </Reveal>
 
             <Reveal delay={80}>
-              <div className="flex h-full flex-col justify-between gap-6 rounded-3xl bg-ink p-7 text-white shadow-card">
+              <div className="flex h-full flex-col justify-between gap-6 rounded-3xl bg-sea p-7 text-white shadow-card">
                 <div>
                   <p className="font-display text-[17px] font-extrabold">Reservá ahora</p>
                   <a

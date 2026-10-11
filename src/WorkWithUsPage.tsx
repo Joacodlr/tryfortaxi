@@ -1,5 +1,5 @@
-import { ArrowRight, Briefcase, Mail } from "lucide-react";
-import { CONTACT, WA, WORK_WITH_US } from "./data";
+import { ArrowRight, Briefcase } from "lucide-react";
+import { WA, WORK_WITH_US } from "./data";
 import { Btn, Eyebrow, Reveal } from "./ui";
 
 const waHref = (msg?: string) =>
@@ -25,7 +25,7 @@ function RequirementList({ title, items }: { title: string; items: readonly stri
 export function WorkWithUsPage() {
   return (
     <div className="pt-[68px]">
-      <section className="bg-ink py-14 text-white lg:py-16">
+      <section className="bg-sea py-14 text-white lg:py-16">
         <div className="shell">
           <p className="label-mono flex items-center gap-3 text-sun">
             <span className="h-px w-8 bg-sun/50" />
@@ -57,9 +57,6 @@ export function WorkWithUsPage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Btn variant="wa" href={waHref("Hola, quiero postular como conductor/propietario. Adjunto mi CV.")}>
                 <WhatsAppIcon size={18} /> Postular por WhatsApp
-              </Btn>
-              <Btn variant="outline" href={`mailto:${CONTACT.email}`}>
-                <Mail size={18} /> Enviar CV por correo
               </Btn>
             </div>
           </Reveal>

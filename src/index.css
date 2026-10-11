@@ -7,18 +7,26 @@
    ================================================================== */
 
 @theme {
-  /* Tinta — verde-teal muy oscuro, más cálido que un negro puro. */
-  --color-ink: #122b29;
-  --color-ink-2: #183a37;
-  --color-carbon: #1e4340;
-  --color-carbon-2: #2a534f;
+  /* Tinta — azul marino, para texto y velos sobre fotos. */
+  --color-ink: #0b2740;
+  --color-ink-2: #10355a;
+  --color-carbon: #12395c;
+  --color-carbon-2: #1f4e78;
 
-  /* Mar — turquesa profundo, para leerse sobre fondo claro y oscuro. */
-  --color-ocean: #0e7c86;
-  --color-ocean-deep: #0a5960;
-  /* Sol — dorado cálido, el acento de las llamadas a la acción. */
-  --color-sun: #e8a33d;
-  --color-sun-deep: #b97c1f;
+  /* Mar — azul océano vivo: fondo de las secciones de color (hero,
+     destacados, nosotros, footer). Con texto blanco da contraste 6:1. */
+  --color-sea: #0866a8;
+  --color-sea-2: #1688d4;
+  --color-sea-deep: #054a7d;
+
+  /* Azul para texto/acentos sobre fondo claro. */
+  --color-ocean: #0a7cc4;
+  --color-ocean-deep: #075f99;
+  /* Sol — amarillo vivo, el acento de las llamadas a la acción. */
+  --color-sun: #ffcf40;
+  --color-sun-deep: #c98a00;
+  --color-facebook: #1877f2;
+  --color-instagram: #e4405f;
   --color-wa: #25d366;
   --color-danger: #d0402e;
 
@@ -27,7 +35,8 @@
   --color-mist: #f5efe3;
   --color-line: #e7ddc9;
   --color-steel: #5c6560;
-  --color-steel-2: #8b948e;
+  /* Texto secundario sobre las secciones azules (solo se usa ahí). */
+  --color-steel-2: #d6e9f7;
 
   /* Tipografía */
   --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -35,8 +44,8 @@
 
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --shadow-card: 0 1px 2px rgb(18 43 41 / 0.05), 0 14px 32px -14px rgb(18 43 41 / 0.16);
-  --shadow-lift: 0 2px 4px rgb(18 43 41 / 0.05), 0 30px 56px -20px rgb(18 43 41 / 0.26);
+  --shadow-card: 0 1px 2px rgb(11 39 64 / 0.05), 0 14px 32px -14px rgb(11 39 64 / 0.16);
+  --shadow-lift: 0 2px 4px rgb(11 39 64 / 0.05), 0 30px 56px -20px rgb(11 39 64 / 0.26);
   --shadow-deep: 0 40px 90px -30px rgb(0 0 0 / 0.55);
 }
 
@@ -47,6 +56,14 @@
     scroll-behavior: smooth;
     scroll-padding-top: 84px;
     -webkit-text-size-adjust: 100%;
+  }
+
+  /* Red de seguridad: si algo llegara a ser más ancho que la pantalla,
+     se recorta en vez de ensanchar la página (en Android eso dejaba el
+     botón de menú fuera de vista, a la derecha). */
+  html,
+  body {
+    overflow-x: clip;
   }
 
   body {
