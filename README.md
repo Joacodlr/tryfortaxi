@@ -79,16 +79,17 @@ vez de galería.
 
 ## Opiniones de pasajeros
 
-La sección "Opiniones" de la home es lo único con servidor: una función de
-Vercel en [`api/reviews.ts`](api/reviews.ts) que guarda las opiniones en
-Upstash Redis. Para activarla en Vercel: **Storage → Upstash for Redis →
-Connect** al proyecto (crea solas `KV_REST_API_URL` y `KV_REST_API_TOKEN`) y
-volver a desplegar. Sin eso, la sección muestra "no se pudieron cargar".
+La sección "Opiniones" de la home es lo único con servidor: un archivo PHP,
+[`public/api/reviews.php`](public/api/reviews.php), que viaja dentro de
+`dist/` y funciona en cualquier cPanel con PHP 7.4+ (no hay que activar nada).
 
-- Se publican al instante; para borrar una, se elimina de la lista `reviews`
-  en el Data Browser de Upstash.
-- En `npm run dev` funciona sin configurar nada (guarda en memoria).
-- En cPanel no hay funciones: ahí las opiniones no funcionan.
+- Las opiniones se guardan en `/home/<usuario>/taxi-talara-data/reviews.json`,
+  **fuera de `public_html`**: no se borran al subir una versión nueva y no
+  se pueden descargar desde el navegador. La carpeta se crea sola.
+- Se publican al instante. Para borrar una: File Manager → `reviews.json` →
+  Edit → quitar ese bloque `{ ... }` (y la coma que lo separa) → Save.
+- En `npm run dev` funciona sin PHP (guarda en memoria, ver `vite.config.ts`).
+- En Vercel no corre PHP: ahí la sección muestra "no se pudieron cargar".
 
 ## Pendientes antes de publicar
 

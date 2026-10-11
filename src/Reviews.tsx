@@ -6,7 +6,7 @@ import { Eyebrow, Reveal } from "./ui";
 
 /* ------------------------------------------------------------------ *
  *  Opiniones de pasajeros: formulario + listado, en la home.
- *  Se guardan con /api/reviews (ver api/reviews.ts).
+ *  Se guardan con /api/reviews.php (ver public/api/reviews.php).
  * ------------------------------------------------------------------ */
 
 type Review = {
@@ -66,14 +66,14 @@ function StarPicker({ value, onChange }: { value: number; onChange: (n: number) 
 
 function ReviewCard({ r }: { r: Review }) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-line bg-white p-5 shadow-card">
+    <article className="flex h-full min-w-0 flex-col rounded-2xl border border-line bg-white p-5 shadow-card">
       <div className="flex items-center justify-between gap-3">
         <Stars value={r.rating} />
         <time className="text-[12px] text-steel" dateTime={r.date}>
           {fmtDate(r.date)}
         </time>
       </div>
-      <p className="mt-3 flex-1 text-[14px] leading-relaxed text-ink">“{r.comment}”</p>
+      <p className="mt-3 flex-1 text-[14px] leading-relaxed text-ink [overflow-wrap:anywhere]">“{r.comment}”</p>
       <div className="mt-4 flex items-center gap-2.5 border-t border-line pt-3">
         <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sea font-display text-[13px] font-bold uppercase text-white">
           {r.name.charAt(0)}
@@ -106,7 +106,7 @@ export function Reviews() {
 
   useEffect(() => {
     let alive = true;
-    fetch("/api/reviews")
+    fetch("/api/reviews.php")
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((data: { reviews: Review[] }) => {
         if (!alive) return;
@@ -125,7 +125,7 @@ export function Reviews() {
     if (!rating) return setFormError("Elige una calificación de 1 a 5 estrellas.");
     setSending(true);
     try {
-      const res = await fetch("/api/reviews", {
+      const res = await fetch("/api/reviews.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, service, rating, comment, website }),
@@ -167,7 +167,7 @@ export function Reviews() {
                 <span>
                   <Stars value={avg} size={15} />
                   <span className="mt-1 block text-[12px] text-steel">
-                    {reviews.length} opinion{reviews.length === 1 ? "" : "es"}
+                    {reviews.length} {reviews.length === 1 ? "opinión" : "opiniones"}
                   </span>
                 </span>
               </div>
@@ -175,9 +175,9 @@ export function Reviews() {
           )}
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[1fr_380px] lg:gap-10">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-10">
           {/* Listado */}
-          <div className="order-2 lg:order-1">
+          <div className="order-2 min-w-0 lg:order-1">
             {status === "loading" && <p className="text-[14px] text-steel">Cargando opiniones…</p>}
             {status === "error" && reviews.length === 0 && (
               <p className="rounded-2xl border border-dashed border-line bg-white/60 p-6 text-[14px] text-steel">
@@ -193,7 +193,7 @@ export function Reviews() {
             )}
             {reviews.length > 0 && (
               <>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {reviews.slice(0, shown).map((r) => (
                     <ReviewCard key={r.id} r={r} />
                   ))}
@@ -211,7 +211,7 @@ export function Reviews() {
           </div>
 
           {/* Formulario */}
-          <div className="order-1 lg:order-2">
+          <div className="order-1 min-w-0 lg:order-2">
             <div className="rounded-3xl border border-line bg-white p-6 shadow-card lg:sticky lg:top-24 lg:p-7">
               {sent ? (
                 <div className="flex flex-col items-center gap-3 py-6 text-center">

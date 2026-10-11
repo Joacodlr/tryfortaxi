@@ -345,16 +345,16 @@ function Hero({ goto }: { goto: (id: string) => void }) {
         </div>
       </div>
 
-      <div className="relative border-t border-white/15 bg-sea-deep">
+      <div className="relative border-b border-line bg-white">
         <div className="shell flex flex-wrap items-center gap-x-8 gap-y-3 py-5">
           {HIGHLIGHTS.map((h) => (
-            <p key={h} className="flex items-center gap-2 text-[13px] text-white/90">
-              <Check size={15} className="text-sun" /> {h}
+            <p key={h} className="flex items-center gap-2 text-[13px] font-medium text-carbon">
+              <Check size={15} className="text-ocean" strokeWidth={2.5} /> {h}
             </p>
           ))}
           <button
             onClick={() => goto("servicios")}
-            className="ml-auto hidden font-display text-[11px] font-bold uppercase tracking-[0.16em] text-white/70 transition-colors hover:text-sun lg:block"
+            className="ml-auto hidden font-display text-[11px] font-bold uppercase tracking-[0.16em] text-ocean-deep transition-colors hover:text-sea lg:block"
           >
             Ver servicios ↓
           </button>
@@ -375,21 +375,21 @@ const CAPS = [
 
 function Highlights() {
   return (
-    <section className="bg-sea">
+    <section className="bg-sand">
       <div className="shell grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {CAPS.map(([Ic, t, d], i) => (
           <Reveal key={t} delay={i * 80}>
             <div
-              className={`group flex h-full items-start gap-3.5 border-white/8 py-7 sm:pr-6 ${
+              className={`group flex h-full items-start gap-3.5 border-sand-deep/40 py-7 sm:pr-6 ${
                 i % 2 ? "sm:border-l sm:pl-6" : "sm:pl-0"
               } ${i ? "lg:border-l lg:pl-6" : "lg:pl-0"}`}
             >
-              <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-sun/25 bg-sun/10 text-sun transition-all duration-300 group-hover:scale-110 group-hover:bg-sun group-hover:text-ink">
+              <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-sea text-white transition-all duration-300 group-hover:scale-110 group-hover:bg-sea-deep">
                 <Ic size={17} />
               </span>
               <span>
-                <span className="block font-display text-[15px] font-bold text-white">{t}</span>
-                <span className="mt-1 block text-[12.5px] leading-snug text-steel-2">{d}</span>
+                <span className="block font-display text-[15px] font-bold text-carbon">{t}</span>
+                <span className="mt-1 block text-[12.5px] leading-snug text-ink/75">{d}</span>
               </span>
             </div>
           </Reveal>
