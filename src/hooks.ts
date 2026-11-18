@@ -1,33 +1,41 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 /**
- * Enrutador mínimo basado en `history.pushState`, sin librerías: el sitio
- * tiene dos formas de vista (home y página de destino), no hace falta más.
- * El fallback SPA de `.htaccess` ya sirve `index.html` en cualquier ruta,
- * así que una URL como /destinos/cabo-blanco funciona con carga directa.
+ * Enrutador mínimo con `history.pushState`, sin librerías.
+ * El fallback SPA de `.htaccess` sirve index.html en cualquier ruta,
+ * así que /servicios o /flota funcionan también con carga directa.
  */
-export function useRoute() {
-  const [path, setPath] = useState(() => window.location.pathname);
+export function useRouteState() {
+  const [path, setPath] = useState(() => normalize(window.location.pathname));
 
   useEffect(() => {
-    const onPop = () => setPath(window.location.pathname);
+    const onPop = () => setPath(normalize(window.location.pathname));
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
   const navigate = (to: string) => {
-    window.history.pushState({}, "", to);
-    setPath(to);
-    window.scrollTo(0, 0);
+    const [p, hash] = to.split("#");
+    const target = normalize(p || path);
+    if (target !== path || !hash) window.history.pushState({}, "", to);
+    setPath(target);
+    if (hash) {
+      requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView());
+    } else {
+      window.scrollTo(0, 0);
+    }
   };
 
   return { path, navigate };
 }
 
-/** ¿El visitante pidió menos movimiento en su sistema operativo? */
-export const prefersReducedMotion = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const normalize = (p: string) => (p.length > 1 ? p.replace(/\/+$/, "") : p) || "/";
+
+export const RouteContext = createContext<{ path: string; navigate: (to: string) => void }>({
+  path: "/",
+  navigate: () => {},
+});
+export const useRoute = () => useContext(RouteContext);
 
 /** Activa el revelado al hacer scroll de todo `[data-reveal=""]` del documento. */
 export function useRevealOnScroll() {

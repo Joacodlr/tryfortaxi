@@ -1,15 +1,15 @@
 {
-  "name": "taxi-talara-web",
+  "name": "tomyd-web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:wp": "node scripts/build-wp.mjs",
     "lint": "oxlint",
     "typecheck": "tsc -b --noEmit",
-    "preview": "vite preview",
-    "audit": "npm audit --audit-level=high"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

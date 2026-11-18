@@ -1,5 +1,5 @@
 # ==================================================================
-#  Taxi Service Talara — configuración de Apache (cPanel)
+#  Transportes Tomy D. — configuración de Apache (cPanel)
 #
 #  Este archivo vive en public/ y Vite lo copia a dist/ en cada build.
 #  Al subir el contenido de dist/ a public_html, viaja con el sitio:
@@ -70,7 +70,7 @@ DirectoryIndex index.html
   Header always set Cross-Origin-Opener-Policy "same-origin"
 
   # Content-Security-Policy — la defensa principal contra XSS.
-  # Sitio 100% estático: no hay CMS, ni formulario, ni servicios externos.
+  # Sitio estático + un PHP propio (Libro de Reclamaciones). Sin servicios externos.
   Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
 
   # No anunciar la versión de PHP.
