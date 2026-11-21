@@ -16,9 +16,9 @@ export const COMPANY = {
   tagline: "Servicio turístico y de personal",
   // PENDIENTE: RUC
   ruc: "",
-  phoneDisplay: "961 899 458",
-  phoneIntl: "51961899458",
-  email: "miguel_pallin@gmail.com",
+  phoneDisplay: "970 729 218",
+  phoneIntl: "51970729218",
+  email: "transportestomyd@gmail.com",
   // PENDIENTE: confirmar ciudad / zona de cobertura y dirección
   city: "Lima, Perú",
   address: "",

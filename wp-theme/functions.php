@@ -9,7 +9,7 @@
  */
 if (!defined('ABSPATH')) exit;
 
-const TOMYD_COMPANY_EMAIL = 'miguel_pallin@gmail.com';
+const TOMYD_COMPANY_EMAIL = 'transportestomyd@gmail.com';
 const TOMYD_COMPANY_NAME  = 'Transportes Tomy D. E.I.R.L.';
 
 add_action('init', function () {

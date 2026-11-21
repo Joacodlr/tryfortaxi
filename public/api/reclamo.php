@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-const COMPANY_EMAIL = 'miguel_pallin@gmail.com';
+const COMPANY_EMAIL = 'transportestomyd@gmail.com';
 const COMPANY_NAME  = 'Transportes Tomy D. E.I.R.L.';
 
 header('Content-Type: application/json; charset=utf-8');
